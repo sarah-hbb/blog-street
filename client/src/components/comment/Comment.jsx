@@ -162,7 +162,7 @@ const Comment = ({ comment, currentUser, onDelete, onLike, onEdit }) => {
           <CiWarning className="text-5xl" />
           <h2>Are you sure you want to delete comment?</h2>
           <div className="flex flex-row gap-5">
-            <Button deleteBtn={true} onClick={handleDelete} type="button">
+            <Button variant="delete" onClick={handleDelete} type="button">
               Yes, delete this comment
             </Button>
             <Button

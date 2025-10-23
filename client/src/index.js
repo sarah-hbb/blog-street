@@ -1,6 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+// Importing various font weights of Nunito
+import "@fontsource/nunito/200.css"; // Extra-light
+import "@fontsource/nunito/300.css"; // Light
+import "@fontsource/nunito/400.css"; // Regular
+import "@fontsource/nunito/500.css"; // Medium
+import "@fontsource/nunito/600.css"; // Semi-bold
+import "@fontsource/nunito/700.css"; // Bold
+import "@fontsource/nunito/800.css"; // Extra-bold
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { store, persistor } from "./redux/store";

@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "./ui/Button";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
@@ -40,7 +39,7 @@ const OAuth = () => {
     }
   };
   return (
-    <Button type="button" inverseColor onClick={handleGoogleClick}>
+    <Button variant="secondary" onClick={handleGoogleClick} type="button">
       <div className=" inline-flex">
         <FcGoogle className=" text-2xl mr-4" />
         Continue with Google

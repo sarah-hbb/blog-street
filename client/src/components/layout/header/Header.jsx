@@ -12,20 +12,15 @@ const Header = () => {
 
   return (
     <div
-      className="lg:py-4 lg:px-5% p-3  bg-cyan-900 text-cyan-100 
+      className="fixed top-0 lg:px-5% p-3  bg-cyan-800/15 backdrop-blur text-cyan-100 z-30 
     flex justify-between items-center gap-4 w-full"
     >
       <Link to="/" className="flex sm:gap-4 gap-2 items-center">
-        <img
-          src={logo}
-          alt=""
-          className="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10"
-        />
         <h1
-          className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l  lg:block hidden
+          className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l
         from-cyan-50 to-cyan-400 text-nowrap hover:scale-105 transition-all ease-in-out"
         >
-          Blog Street
+          Portfolio
         </h1>
       </Link>
       <Searchbar />

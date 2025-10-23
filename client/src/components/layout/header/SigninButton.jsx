@@ -1,4 +1,3 @@
-import React from "react";
 import TextLink from "../../ui/TextLink";
 
 const SigninButton = () => {

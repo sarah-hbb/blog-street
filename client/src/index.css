@@ -33,9 +33,15 @@
 }
 
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 300;
   font-style: normal;
+}
+
+a {
+  font-family: "Nunito", sans-serif;
+  text-decoration: none;
+  color: inherit;
 }
 
 .tiptap p.is-editor-empty:first-child::before {

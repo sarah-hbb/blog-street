@@ -254,7 +254,7 @@ const DashboardProfile = () => {
             type="submit"
             className="w-full"
             onClick={handleUserUpdateSubmit}
-            inverseColor={false}
+            variant="primary"
             disabled={loading || imageFileUoloading}
           >
             <span className="hover:font-semibold transition-all">
@@ -296,19 +296,14 @@ const DashboardProfile = () => {
           <CiWarning className="text-5xl" />
           <h2>Are you sure you want to delete your account?</h2>
           <div className="flex flex-row gap-5">
-            <Button
-              deleteBtn={true}
-              onClick={handleDeleteAccount}
-              type="button"
-            >
+            <Button variant="delete" onClick={handleDeleteAccount}>
               Yes, delete my account
             </Button>
             <Button
-              inverseColor={true}
+              variant="secondary"
               onClick={() => {
                 setModalIsOpen(false);
               }}
-              type="button"
             >
               No, cancel
             </Button>

@@ -133,10 +133,7 @@ const CommentsList = forwardRef(({ postId }, ref) => {
           }}
         />
       ) : (
-        <div
-          className="p-2 mt-2 gap-2
-        rounded-md border border-cyan-500 shadow-lg shadow-cyan-800"
-        >
+        <div className="p-2 mt-2 gap-2 rounded-md border border-cyan-500">
           <Link
             to="/signin"
             state={{ from: location }}
@@ -148,8 +145,8 @@ const CommentsList = forwardRef(({ postId }, ref) => {
         </div>
       )}
       <div
-        className="flex flex-col justify-between items-center gap-2 p-2 w-full
-       lg:p-10 lg:shadow-2xl mb-5
+        className=" shadow-lg shadow-cyan-700 flex flex-col justify-between items-center gap-2 p-2 w-full
+       lg:p-10 mb-5
       [&>*:not(:last-child)]:border-b-2 [&>*]:border-cyan-500"
       >
         <h1 className="text-lg font-semibold self-start border-none py-4">

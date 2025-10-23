@@ -76,10 +76,10 @@ const CreateComment = ({
               onChange={(e) => setCommentContent(e.target.value)}
             ></textarea>
             <Button
-              inverseColor={true}
+              variant="secondary"
               type="submit"
               className="self-end transitin transition-all hover:scale-110"
-              onS
+              onSubmit={handleSubmit}
             >
               <GrSend />
             </Button>

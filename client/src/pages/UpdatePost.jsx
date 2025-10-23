@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import ReactQuill from "react-quill";
+import ReactQuill from "react-quill";
 import TextEditor from "../components/textEditor/TextEditor";
 import "react-quill/dist/quill.snow.css";
 import Input from "../components/ui/Input";
@@ -46,6 +46,8 @@ const UpdatePost = () => {
   useEffect(() => {
     fetchPostById();
   }, [postId]);
+
+  console.log(formData);
 
   const handleChangeImageFile = (e) => {
     setFile(e.target.files[0]);
@@ -133,6 +135,37 @@ const UpdatePost = () => {
     { value: "github", label: "Git-hub" },
     { value: "travel", label: "Travel" },
   ];
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image"],
+      ["clean"],
+      ["blockquote", "code-block"],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "code-block",
+    "list",
+    "bullet",
+    "link",
+    "image",
+  ];
+
   return (
     <div
       className="flex flex-col justify-center items-center
@@ -148,14 +181,20 @@ const UpdatePost = () => {
             id="title"
             defaultValue={""}
             onChange={(e) => {
-              setFormData({ ...formData, title: e.target.value });
+              setFormData((prvFormData) => ({
+                ...prvFormData,
+                title: e.target.value,
+              }));
             }}
           />
           <Select
             className="sm:w-3/5"
             options={categoryOptions}
             onChange={(e) => {
-              setFormData({ ...formData, category: e.target.value });
+              setFormData((prvFormData) => ({
+                ...prvFormData,
+                category: e.target.value,
+              }));
             }}
             value={formData.category}
           />
@@ -174,9 +213,8 @@ const UpdatePost = () => {
             />
 
             <Button
-              type="button"
               onClick={handleUploadImage}
-              inverseColor={true}
+              variant="secondary"
               disabled={imageUploadProgress}
             >
               <span>Upload Image</span>
@@ -203,17 +241,21 @@ const UpdatePost = () => {
           )}
         </div>
 
-        {/* <ReactQuill
-          theme="snow"
-          onChange={(value) => setFormData({ ...formData, content: value })}
-          placeholder="Write your post..."
+        <ReactQuill
           value={formData.content}
-        /> */}
+          theme="snow"
+          modules={modules}
+          formats={formats}
+          onChange={(value) =>
+            setFormData((prvFormData) => ({ ...prvFormData, content: value }))
+          }
+          placeholder="Write your post..."
+        />
 
-        <TextEditor
+        {/* <TextEditor
           content={formData.content}
           onChange={(value) => setFormData({ ...formData, content: value })}
-        />
+        /> */}
 
         {publishError && <Alert status="failure">{publishError}</Alert>}
         <Button type="submit" className="w-1/5 self-end">

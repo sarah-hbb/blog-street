@@ -49,8 +49,8 @@ const ProfileInHeader = ({ currentUser }) => {
       `}
       >
         <div
-          className="cursor-default px-3 py-2 w-full flex-col bg-cyan-200 rounded-lg [&>*]:py-2
-           [&>a:hover]:text-cyan-800 [&>a:hover]:font-semibold [&>a:active]:bg-cyan-300 [&>span]:text-gray-400"
+          className="cursor-default px-3 py-2 w-full flex-col bg-cyan-200 rounded-lg [&>*]:py-2 [&>*]:px-3 
+"
         >
           <div>@{currentUser.username}</div>
           <div className="border-b-2 border-cyan-600">{currentUser.email}</div>

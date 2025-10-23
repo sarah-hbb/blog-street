@@ -4,11 +4,12 @@ import { useSelector } from "react-redux";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Alert from "../components/ui/Alert";
 import CommentsList from "../components/comment/CommentsList";
-import PostsList from "../components/post/PostsList";
+
 import { PiBookmarkSimpleDuotone } from "react-icons/pi";
 import useBookmark from "../hooks/useBookmark";
 import hljs from "highlight.js";
 import "highlight.js/styles/monokai-sublime.css"; // Monokai theme
+import Button from "../components/ui/Button";
 
 const Post = () => {
   const { postSlug } = useParams();
@@ -24,6 +25,7 @@ const Post = () => {
   const { handleBookmark } = useBookmark();
   const location = useLocation();
   const commentsRef = useRef(null);
+  const contentRef = useRef(null);
 
   const fetchPostBySlug = async () => {
     try {
@@ -85,19 +87,21 @@ const Post = () => {
         commentsRef.current?.scrollIntoView({
           behavior: "smooth",
         });
-      }, 1000);
+      }, 1500);
     }
   }, [location]);
 
   // Apply highlight.js to all <pre><code> blocks after rendering
   useEffect(() => {
-    document.querySelectorAll("pre code").forEach((block) => {
-      hljs.highlightBlock(block);
-    });
+    if (contentRef.current) {
+      contentRef.current.querySelectorAll("code.ql-syntax").forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
   }, [post]);
 
   return (
-    <div className="flex flex-col justify-center items-center pt-4">
+    <div className="flex flex-col justify-center items-center">
       {loading ? (
         <LoadingSpinner />
       ) : error ? (
@@ -106,37 +110,15 @@ const Post = () => {
         </Alert>
       ) : (
         <main
-          className="px-4 py-8 w-full md:max-w-7xl md:mx-auto
+          className="w-full 
           border-b border-gray-300
-            flex flex-col justify-center items-center pt-4 gap-4 font-serif"
+            flex flex-col justify-center font-serif"
         >
-          <h1 className="text-3xl p-6 text-center font-bold italic text-slate-600">
-            {post.title}
-          </h1>
-          <div className="flex justify-between items-center w-full">
-            <div className="flex gap-3">
-              {currentUser && currentUser.isAdmin && (
-                <Link
-                  to={`/update-post/${post._id}`}
-                  className="bg-cyan-700 py-2 px-4 text-white font-normal
-                 hover:bg-black hover:font-bold transition-all rounded "
-                >
-                  Edit post
-                </Link>
-              )}
-              <Link
-                className="text-sm p-3 self-end font-semibold uppercase border border-cyan-400
-             rounded shadow-cyan-800 shadow-xl hover:scale-105 transition"
-                to={`/search?category=${post.category}`}
-              >
-                {post.category}
-              </Link>
-            </div>
-
+          <div className="relative w-full">
             {/* bookmarks section */}
-            <div className="flex flex-row items-center justify-center gap-1">
+            <div className="absolute z-10 top-2 right-0 flex flex-row items-center justify-center gap-1">
               {post.numberOfBookmarks !== 0 && (
-                <div className="text-amber-400 font-semibold uppercase flex flex-row  gap-1">
+                <div className="text-amber-400 font-semibold flex flex-row gap-1">
                   <span>{post.numberOfBookmarks}</span>
                   <span className="sm:block hidden">{`${
                     post.numberOfBookmarks === 1 ? "bookmark" : "bookmarks"
@@ -153,47 +135,77 @@ const Post = () => {
                 />
               </button>
             </div>
+            <img
+              src={post.image}
+              alt=""
+              className="w-full h-[30vh] sm:h-[50vh] object-cover object-center blur-[1px] brightness-[0.1] "
+            />
+            {/* Post title over the image */}
+            <h1
+              className="absolute mx-4 top-[20%] max-w-7xl text-xl sm:text-6xl text-left 
+            font-bold italic text-slate-200 bg-cyan-600 bg-opacity-20 p-4 rounded shadow-lg
+            animate-slideRightToView
+            "
+            >
+              {post.title}
+            </h1>
+
+            {/* Edit post button - only visible to admin */}
+            {currentUser && currentUser.isAdmin && (
+              <div className="absolute bottom-8 right-4">
+                <Button variant="secondary" size="lg">
+                  <Link to={`/update-post/${post._id}`}>Edit post</Link>
+                </Button>
+              </div>
+            )}
           </div>
-          <img
-            src={post.image}
-            alt=""
-            className="w-full h-80 object-cover object-center"
-          />
-          <h3 className="text-gray-400 self-end">
-            <span> last updated at </span>
-            {new Date(post.updatedAt).toLocaleDateString()}
-          </h3>
-          <div
-            // post-content class added to style innerHTML of post content. you can style it in index.css file
-            dangerouslySetInnerHTML={{ __html: post.content }}
-            className="max-w-5xl w-full mx-auto post-content"
-          ></div>
 
-          {/* Comments setion */}
-          <div className="flex flex-col w-full max-w-3xl mx-auto self-start p-2 mt-2 gap-4">
-            <CommentsList postId={post._id} ref={commentsRef} />
-          </div>
+          {/* {Post content and comments section} + category section */}
+          <div className="p-5 w-full flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-start">
+            {/* Post content and comments section */}
+            <div className="relative overflow-hidden sm:w-2/3 sm:-top-[20vh] animate-slideRightToView">
+              {/* Post content */}
+              <div
+                ref={contentRef}
+                // post-content class added to style innerHTML of post content. you can style it in index.css file
+                dangerouslySetInnerHTML={{ __html: post.content }}
+                className=" post-content p-6 
+              text-slate-200 sm:bg-cyan-600 sm:bg-opacity-20 sm:rounded "
+              ></div>
 
-          {/* More posts from this category */}
-
-          {loadingPostsByCategory ? (
-            <LoadingSpinner />
-          ) : (
-            <div>
-              {postsByCategory.length === 0 ? (
-                <Alert status={"failure"}>{errorPostsByCategory}</Alert>
-              ) : (
-                <div className="flex flex-col justify-center items-center border-t-2 border-black p-4 w-full">
-                  <h1 className="text-xl font-semibold p-2 mb-4 italic">
-                    More posts from {post.category} category
-                  </h1>
-                  <PostsList
-                    posts={postsByCategory.filter((p) => p._id !== post._id)}
-                  />
-                </div>
-              )}
+              {/* Comments setion */}
+              <div className="flex flex-col w-full max-w-3xl mx-auto p-2 mt-2 gap-4">
+                <CommentsList postId={post._id} ref={commentsRef} />
+              </div>
             </div>
-          )}
+
+            {/* More posts from this category */}
+            {loadingPostsByCategory ? (
+              <LoadingSpinner />
+            ) : (
+              <div className="sm:w-1/3 w-full">
+                {postsByCategory.length === 0 ? (
+                  <Alert status={"failure"}>{errorPostsByCategory}</Alert>
+                ) : (
+                  <div
+                    className=" bg-cyan-200 bg-opacity-10 flex flex-col justify-center 
+                    border-t-2 border-white p-6 my-4 overflow-hidden animate-slideDownToView"
+                  >
+                    <h1 className="text-2xl font-bold text-slate-200 italic mb-4">
+                      More posts from {post.category} category
+                    </h1>
+                    {postsByCategory
+                      .filter((p) => p._id !== post._id)
+                      .map((post) => (
+                        <div className="hover:underline my-1" key={post.id}>
+                          <Link to={`/post/${post.slug}`}>{post.title} </Link>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </main>
       )}
     </div>

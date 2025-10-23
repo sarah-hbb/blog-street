@@ -135,11 +135,11 @@ const DashboardUsers = () => {
             <CiWarning className="text-5xl" />
             <h2>Are you sure you want to delete this user</h2>
             <div className="flex flex-row gap-5">
-              <Button deleteBtn={true} onClick={handleDeleteUser} type="button">
+              <Button variant="delete" onClick={handleDeleteUser}>
                 Yes, delete this user
               </Button>
               <Button
-                inverseColor={true}
+                variant="secondary"
                 onClick={() => {
                   setShowDeleteModal(false);
                 }}

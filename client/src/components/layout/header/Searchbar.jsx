@@ -27,19 +27,21 @@ const Searchbar = () => {
 
   return (
     <form
-      className="bg-red relative bg-cyan-100 px-3 rounded-2xl flex items-center gap-1 lg:w-2/5"
+      className="bg-red relative bg-cyan-100/15 px-3 rounded-2xl flex items-center gap-1 lg:w-2/5 
+       hover:shadow-cyan-600 focus:shadow-cyan-600 shadow-md transition-all ease-in-out w-3/5"
       onSubmit={handleSearch}
     >
       <input
+        className="rounded-md min-h-10/4 px-3 bg-transparent py-1 w-full 
+        border-none outline-none text-cyan-100 not-placeholder-shown:bg-transparent"
         type="text"
         name="search"
-        placeholder="search..."
+        placeholder="search in blog..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="rounded-md min-h-10/4 py-2 w-full border-none outline-none text-cyan-800 bg-inherit"
       />
-      <button className="border-l-2 border-cyan-800">
-        <FiSearch className="text-cyan-800 text-2xl hover:scale-125 transition-transform ml-1" />
+      <button className="border-l-2 border-cyan-100">
+        <FiSearch className="text-cyan-100 text-2xl hover:scale-125 transition-transform ml-1" />
       </button>
     </form>
   );

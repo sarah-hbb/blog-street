@@ -129,15 +129,14 @@ const DashboardPosts = () => {
             <CiWarning className="text-5xl" />
             <h2>Are you sure you want to delete this post</h2>
             <div className="flex flex-row gap-5">
-              <Button deleteBtn={true} onClick={handleDeletePost} type="button">
+              <Button variant="delete" onClick={handleDeletePost}>
                 Yes, delete this post
               </Button>
               <Button
-                inverseColor={true}
+                variant="secondary"
                 onClick={() => {
                   setShowDeleteModal(false);
                 }}
-                type="button"
               >
                 No, cancel
               </Button>
