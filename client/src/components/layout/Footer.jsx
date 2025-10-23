@@ -11,8 +11,20 @@ const Footer = () => {
       </span>
       <div className="flex gap-x-6 ml-3">
         <div className="text-2xl text-cyan-400 flex gap-3">
-          <SiGithub />
-          <SiLinkedin />
+          <a
+            href="https://github.com/sarah-hbb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SiGithub />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sarah-habibi/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SiLinkedin />
+          </a>
         </div>
       </div>
     </div>
