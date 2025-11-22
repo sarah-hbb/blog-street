@@ -9,7 +9,7 @@ import ContactMe from "../components/portfolio/sections/ContactMe";
 
 const Home = () => {
   return (
-    <main className="bg-[url('/public/images/wave2.jpg')] bg-cover bg-center">
+    <main>
       <div className="w-full flex flex-wrap md:flex-row flex-col items-center justify-center gap-10 mx-auto w-max-7xl ">
         <PerspectiveText />
         <figure>

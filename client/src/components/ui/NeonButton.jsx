@@ -1,9 +1,8 @@
-import { Children } from "react";
-
-const NeonButton = ({ children, className }) => {
+const NeonButton = ({ children, className, ...rest }) => {
   return (
     <button
-      className={`${className}
+      {...rest}
+      className={`${className} 
       "font-nunito relative inline-block px-6 py-3 font-semibold text-cyan-400
      uppercase transition-all ease-in tracking-widest hover:tracking-widest overflow-hidden
     hover:bg-cyan-600 hover:text-black hover:shadow-cyan-800 hover:shadow-lg
