@@ -1,16 +1,15 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const userRoutes = require("./routes/user.routes.js");
 const authRoutes = require("./routes/auth.routes.js");
 const postRoutes = require("./routes/post.route.js");
 const commentRoutes = require("./routes/comment.routes.js");
 const summaryRoutes = require("./routes/summary.route.js");
+const analyzeRoutes = require("./routes/analyze.routes.js");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-
-dotenv.config();
 
 mongoose
   .connect(process.env.MONGO_DB_CONNECTION)
@@ -35,6 +34,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/summary", summaryRoutes);
+app.use("/api/analyze", analyzeRoutes);
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
