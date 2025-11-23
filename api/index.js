@@ -8,6 +8,7 @@ const postRoutes = require("./routes/post.route.js");
 const commentRoutes = require("./routes/comment.routes.js");
 const summaryRoutes = require("./routes/summary.route.js");
 const analyzeRoutes = require("./routes/analyze.routes.js");
+const gdeltRoutes = require("./routes/gdelt.routes.js");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
@@ -35,6 +36,7 @@ app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/summary", summaryRoutes);
 app.use("/api/analyze", analyzeRoutes);
+app.use("/api/gdelt", gdeltRoutes);
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {

@@ -29,23 +29,23 @@ const Sentimentalist = () => {
 
     try {
       // 1️⃣ Fetch GDELT articles
-      const res = await fetch(
-        `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(
-          topic
-        )}&mode=artlist&format=json`
+      const gdeltRes = await fetch(
+        `/api/gdelt?topic=${encodeURIComponent(topic)}`
       );
-      const data = await res.json();
+      if (!gdeltRes.ok) throw new Error("Failed to fetch articles");
+      const gdeltData = await gdeltRes.json();
 
-      if (!data.articles || data.articles.length === 0) {
+      const fetchedArticles = gdeltData.articles || [];
+
+      if (fetchedArticles.length === 0) {
         setError("No articles found for this topic");
         setLoading(false);
         return;
       }
-
-      setArticles(data.articles);
+      setArticles(fetchedArticles);
 
       // 2️⃣ Combine all titles
-      const titlesText = data.articles
+      const titlesText = fetchedArticles
         .map((article, i) => `${i + 1}. ${article.title}`)
         .join("\n");
 
@@ -61,11 +61,10 @@ const Sentimentalist = () => {
       const analysisData = await analysisRes.json();
       setAnalysis(analysisData);
     } catch (err) {
-      console.error(err);
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // Prepare data for Recharts
@@ -76,13 +75,9 @@ const Sentimentalist = () => {
       }))
     : [];
 
-  const biasData = analysis?.bias
-    ? Object.entries(analysis.bias).map(([label, value]) => ({ label, value }))
-    : [];
-
   const COLORS = ["#4caf50", "#ff9800", "#f44336"]; // positive, neutral, negative
   return (
-    <div className="max-w-xl mx-auto p-4">
+    <div className="max-w-xl mx-auto p-4 [&_h2]:text-cyan-400">
       <h1 className="text-2xl font-bold mb-4">Media Sentiment Analyzer</h1>
 
       {/* Form */}
@@ -95,7 +90,7 @@ const Sentimentalist = () => {
           onChange={(e) => setTopic(e.target.value)}
         />
         <NeonButton type="submit" disabled={loading} className="mb-20">
-          {loading ? "Analyzing…" : "Fetch & Analyze"}
+          {loading ? "Analyzing…" : "Analyze"}
         </NeonButton>
       </form>
 
@@ -104,7 +99,9 @@ const Sentimentalist = () => {
       {/* Articles list (optional) */}
       {articles.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Fetched Articles</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            Fetched Articles Samples
+          </h2>
           <ul className="list-disc ml-5">
             {articles.slice(0, 5).map((a, i) => (
               <li key={i}>{a.title}</li>
@@ -141,20 +138,34 @@ const Sentimentalist = () => {
               </PieChart>
             </div>
           )}
+        </div>
+      )}
 
-          {/* Bias Bar Chart */}
-          {biasData.length > 0 && (
-            <div>
-              <h2 className="text-xl font-semibold mb-2">Media Bias</h2>
-              <BarChart width={350} height={300} data={biasData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8884d8" />
-              </BarChart>
-            </div>
-          )}
+      {/* Bias */}
+      {analysis && analysis.bias?.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold mb-2">Bias</h2>
+          <p> {analysis.bias}</p>
+        </div>
+      )}
+
+      {/* Key Topics */}
+      {analysis && analysis.top_themes?.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold mb-2">Key Topics</h2>
+          <ul className="list-disc ml-5">
+            {analysis.top_themes.map((theme, i) => (
+              <li key={i}>{theme}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/*Summary */}
+      {analysis && analysis.summary && (
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold mb-2">Summary</h2>
+          <p>{analysis.summary}</p>
         </div>
       )}
     </div>

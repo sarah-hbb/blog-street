@@ -7,32 +7,41 @@ const client = new OpenAI({
 const analyzeSentiment = async (titlesText) => {
   if (!titlesText) throw new Error("No text provided to analyze");
 
-  const prompt = `
-You are an expert media analyst.
-
-Analyze the following NEWS HEADLINES about a topic:
-
-${titlesText}
-
-Provide a JSON response with:
-{
-  "sentiment": { "positive": %, "negative": %, "neutral": % },
-  "bias": "overall political or narrative bias",
-  "top_themes": ["...", "..."],
-  "summary": "short description of media stance"
-}
-`;
-
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" }, // ⬅️ Forces strict JSON
       temperature: 0,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert media analyst. Return ONLY valid JSON, no backticks, no code fences.",
+        },
+        {
+          role: "user",
+          content: `
+Analyze the following news headlines:
+
+${titlesText}
+
+Return ONLY a JSON object with:
+{
+  "sentiment": { "positive": number, "negative": number, "neutral": number },
+  "bias": "short text describing political/narrative bias",
+  "top_themes": ["list of themes"],
+  "summary": "short summary"
+}
+          `,
+        },
+      ],
     });
 
+    // JSON is guaranteed valid now
     return JSON.parse(completion.choices[0].message.content);
   } catch (err) {
     throw new Error("OpenAI analysis failed: " + err.message);
   }
 };
+
 module.exports = { analyzeSentiment };
