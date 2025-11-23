@@ -26,7 +26,7 @@ const experience = [
   {
     role: "Frontend Developer",
     company: "Instapro/Werkspot",
-    duration: "Dec 2020 - Sep 2024",
+    duration: "Dec 2022 - Sep 2024",
     description:
       "Developing and maintaining the front end of the platform using Next.js and typescript. Collaborating with designers and backend developers to create a seamless user experience.",
   },
