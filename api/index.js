@@ -4,9 +4,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user.routes.js");
 const authRoutes = require("./routes/auth.routes.js");
-const postRoutes = require("./routes/post.route.js");
+const postRoutes = require("./routes/post.routes.js");
 const commentRoutes = require("./routes/comment.routes.js");
-const summaryRoutes = require("./routes/summary.route.js");
+const summaryRoutes = require("./routes/summary.routes.js");
 const analyzeRoutes = require("./routes/analyze.routes.js");
 const gdeltRoutes = require("./routes/gdelt.routes.js");
 const cookieParser = require("cookie-parser");
@@ -23,7 +23,6 @@ const app = express();
 app.listen(3000, () => {
   console.log("Server is running on port 3000...");
 });
-// to integrate open ai api
 app.use(cors());
 // to use json format for input of the backend
 app.use(express.json());

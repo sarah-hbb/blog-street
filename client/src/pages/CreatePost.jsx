@@ -20,6 +20,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { set } from "mongoose";
 
 const CreatePost = () => {
   const [file, setFile] = useState(null);
@@ -27,6 +28,9 @@ const CreatePost = () => {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [summaryError, setSummaryError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -70,6 +74,33 @@ const CreatePost = () => {
     } catch (error) {
       setImageUploadError("Image upload faild");
       setImageUploadProgress(null);
+    }
+  };
+
+  const handleGenerateContent = async () => {
+    setGenerating(true);
+    setSummaryError(null);
+    setSummary("");
+
+    try {
+      const res = await fetch("/api/summary/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic: formData.title,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setFormData({ ...formData, content: data.summary });
+      }
+    } catch (error) {
+      setSummaryError("Failed to fetch summary");
+      console.error("Error generating content:", error);
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -209,6 +240,19 @@ const CreatePost = () => {
               className="w-full h-72 object-cover"
             />
           )}
+        </div>
+
+        <div className="flex flex-row gap-4 self-end">
+          <h1 className="text-purple-400">magic article generator</h1>
+          <button
+            type="button"
+            className={`text-2xl hover:rotate-[30deg] hover:scale-125 transition-all ${
+              generating ? "animate-pulse" : ""
+            }`}
+            onClick={handleGenerateContent}
+          >
+            🪄
+          </button>
         </div>
 
         <ReactQuill
